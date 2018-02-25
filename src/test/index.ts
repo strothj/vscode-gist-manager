@@ -1,23 +1,52 @@
-//
-// PLEASE DO NOT MODIFY / DELETE UNLESS YOU KNOW WHAT YOU ARE DOING
-//
-// This file is providing the test runner to use when running extension tests.
-// By default the test runner in use is Mocha based.
-//
-// You can provide your own test runner if you want to override it by exporting
-// a function run(testRoot: string, clb: (error:Error) => void) that the extension
-// host can call to run the tests. The test runner is expected to use console.log
-// to report the results back to the caller. When the tests are finished, return
-// a possible error to the callback or null if none.
+/**
+ * Wires in Jest as the test runner in place of the default Mocha.
+ */
 
-/* tslint:disable-next-line:no-submodule-imports */
-import * as testRunner from "vscode/lib/testrunner";
+/* tslint:disable:no-implicit-dependencies no-console */
+import path from "path";
+import { runCLI } from "jest-cli";
 
-// You can directly control Mocha options by uncommenting the following lines
-// See https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically#set-options for more info
-testRunner.configure({
-  ui: "tdd", // the TDD UI is being used in extension.test.ts (suite, test, etc.)
-  useColors: true, // colored output from test results
-});
+async function run(
+  testRoot: string,
+  callback: (error: Error | null, failures?: any) => void,
+) {
+  process.chdir(path.resolve(__dirname, "../.."));
 
-module.exports = testRunner;
+  try {
+    // For some reason this seems to be required for Jest output to be streamed
+    // to the Debug Console.
+    const logger = (line: string) => {
+      console.log(line);
+      return true;
+    };
+    process.stdout.write = logger;
+    process.stderr.write = logger;
+
+    const { globalConfig, results } = await runCLI([], [testRoot]);
+    const failures = collectFailures(results);
+
+    if (failures.length > 0) {
+      console.log("globalConfig:", globalConfig);
+      callback(null, failures);
+      return;
+    }
+
+    callback(null);
+  } catch (e) {
+    callback(e);
+  }
+}
+
+module.exports.run = run;
+
+function collectFailures(results: any): string[] {
+  const failures = results.testResults.reduce(
+    (acc: string[], testResult: any) => {
+      if (testResult.failureMessage) acc.push(testResult.failureMessage);
+      return acc;
+    },
+    [],
+  );
+
+  return failures;
+}
