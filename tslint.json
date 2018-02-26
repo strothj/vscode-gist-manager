@@ -11,6 +11,14 @@
     "object-literal-sort-keys": false,
     "interface-name": [true, "never-prefix"],
     "no-implicit-dependencies": [true, "dev"],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore"
+    ],
+    "import-name": false,
+    "array-type": false,
     "prettier": true
   }
 }

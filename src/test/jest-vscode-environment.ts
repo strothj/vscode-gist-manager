@@ -1,28 +1,26 @@
 /**
  * Exposes the Visual Studio Code extension API to the Jest testing environment.
  *
- * They would otherwise not have access because they are sandboxed.
+ * Tests would otherwise not have access because they are sandboxed.
+ *
+ * @see jest-vscode-framework-setup.ts
  */
-const vscode = require("vscode");
-const NodeEnvironment = require("jest-environment-node");
+import vscode from "vscode";
+import NodeEnvironment from "jest-environment-node";
 
 class VsCodeEnvironment extends NodeEnvironment {
-  constructor(config) {
+  constructor(config: any) {
     super(config);
   }
 
-  async setup() {
+  public async setup() {
     await super.setup();
     this.global.vscode = vscode;
   }
 
-  async teardown() {
+  public async teardown() {
     this.global.vscode = {};
     await super.teardown();
-  }
-
-  runScript(script) {
-    return super.runScript(script);
   }
 }
 
