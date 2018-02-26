@@ -12,6 +12,7 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "plugins": [{ "name": "tslint-language-service" }]
   }
 }
