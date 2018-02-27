@@ -1,7 +1,7 @@
 import { TreeDataProvider, ProviderResult } from "vscode";
 import GistTreeLoginItem from "./GistTreeLoginItem";
 
-class GistTreeProvider implements TreeDataProvider<GistTreeEntry> {
+class GistTree implements TreeDataProvider<GistTreeEntry> {
   constructor() {
     //
   }
@@ -21,7 +21,7 @@ class GistTreeProvider implements TreeDataProvider<GistTreeEntry> {
   }
 }
 
-export default GistTreeProvider;
+export default GistTree;
 
 type GistTreeEntry = { type: "LOGIN_BUTTON" } | { type: "GIST" };
 
