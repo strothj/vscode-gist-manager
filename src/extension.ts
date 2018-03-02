@@ -1,13 +1,20 @@
-import { window, workspace, ExtensionContext } from "vscode";
+import { ExtensionContext, window, workspace } from "vscode";
 
-import GistTree from "./GistTree";
+// import GistTree from "./GistTree";
 import LoginPage from "./LoginPage";
-
-import models from "./models";
+import { createStore, IStoreEnvironment } from "./store";
 
 export function activate(context: ExtensionContext) {
-  const gistTree = new GistTree();
-  const gistTreeDisposable = window.registerTreeDataProvider("gists", gistTree);
+  const storeEnvironment = createStoreEnvironment(context);
+  const store = createStore(storeEnvironment);
+  store.authenticate();
+
+  // const gistTree = new GistTree(store);
+  // const gistTreeDisposable = window.registerTreeDataProvider("gists", gistTree);
+  const gistTreeDisposable = window.registerTreeDataProvider(
+    "gists",
+    store.gistTree,
+  );
 
   const loginPage = new LoginPage();
   const loginPageDisposable = workspace.registerTextDocumentContentProvider(
@@ -16,10 +23,25 @@ export function activate(context: ExtensionContext) {
   );
 
   context.subscriptions.push(gistTreeDisposable, loginPageDisposable);
-
-  models();
 }
 
 export function deactivate() {
   //
+}
+
+/**
+ * Create store environment using utilities from the extension context. The
+ * returned environment is used to inject extension utilities into the store.
+ *
+ * @param context Extension context.
+ */
+function createStoreEnvironment(context: ExtensionContext): IStoreEnvironment {
+  const storeEnvironment = {
+    getStoredGithubAuthenticationToken: () => {
+      const token = context.globalState.get<string>("githubToken");
+      return token ? token : null;
+    },
+  };
+
+  return storeEnvironment;
 }

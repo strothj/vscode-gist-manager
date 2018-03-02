@@ -1,8 +1,8 @@
 /**
  * Wires in Jest as the test runner in place of the default Mocha.
  */
+import { ResultsObject, runCLI } from "jest";
 import path from "path";
-import { runCLI, ResultsObject } from "jest";
 import sourceMapSupport from "source-map-support";
 
 const srcRootDir = path.resolve(__dirname, "../../src");

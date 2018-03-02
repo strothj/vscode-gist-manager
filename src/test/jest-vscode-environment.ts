@@ -5,8 +5,8 @@
  *
  * @see jest-vscode-framework-setup.ts
  */
-import vscode from "vscode";
 import NodeEnvironment from "jest-environment-node";
+import vscode from "vscode";
 
 class VsCodeEnvironment extends NodeEnvironment {
   constructor(config: any) {

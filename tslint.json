@@ -7,9 +7,7 @@
   ],
   "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
-    "ordered-imports": false,
     "object-literal-sort-keys": false,
-    "interface-name": [true, "never-prefix"],
     "no-implicit-dependencies": [true, "dev"],
     "variable-name": [
       true,

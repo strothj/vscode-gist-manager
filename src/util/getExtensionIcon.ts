@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
 
-interface ThemeIcons {
+interface IThemeIcons {
   light: string;
   dark: string;
 }
 
-const iconList = new Map<string, ThemeIcons>();
+const iconList = new Map<string, IThemeIcons>();
 const iconBasePath = path.resolve(__dirname, "../../resources/icons");
 
 fs.readdirSync(iconBasePath).forEach(filename => {
