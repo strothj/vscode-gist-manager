@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`authenticate throws exception when getToken is not provided 1`] = `"Github token provider was not provided."`;

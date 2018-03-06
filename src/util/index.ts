@@ -1,1 +1,0 @@
-export { getExtensionIcon } from "./getExtensionIcon";
